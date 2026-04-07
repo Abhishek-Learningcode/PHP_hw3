@@ -1,6 +1,17 @@
 <?php
 include "db.php";
-
+$result=$conn->query("select * from emp");
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    $name=$_POST['name'];
+    $age=$_POST['age'];
+    $sal=$_POST['sal'];
+    $email=$_POST['email'];
+ $sql=$conn->prepare("insert into emp(name,age,salary,email)values(?,?,?,?)");
+ $sql->bind_param('sids',$name,$age,$sal,$email);
+ if($sql->execute()){
+    header("Location:home.php");
+ }
+}
 ?>
 
 
@@ -72,7 +83,107 @@ include "db.php";
        </nav>
        
         </header>
-        <main></main>
+        <main>
+            <div
+                class="container mt-5 col-5"
+            >
+                <form action="" method="POST">
+                    <div class="form-floating mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="name"
+                            id="formId1"
+                            placeholder=""
+                        />
+                        <label for="formId1">Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="age"
+                            id=""
+                            placeholder=""
+                        />
+                        <label for="formId1">age</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="sal"
+                            id="formId1"
+                            placeholder=""
+                        />
+                        <label for="formId1">salary</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="email"
+                            id="formId1"
+                            placeholder=""
+                        />
+                        <label for="formId1">Email</label>
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Submit
+                    </button>   
+                </form>
+            </div>
+            <div
+                class="container mt-5 col-5"
+            >
+                <div
+                class="table-responsive"
+            >
+                <table
+                    class="table table-primary"
+                >
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Salary</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        while($row=$result->fetch_assoc()){
+                            ?>
+                            <tr>
+                                <td><?= $row['id']?></td>
+                                <td><?= $row['name']?></td>
+                                <td><?= $row['age']?></td>
+                                <td><?= $row['salary']?></td>
+                                <td><?= $row['email']?></td>
+                                <td>
+                                <a href="edit.php?id=<?= $row['id']?>" class="btn btn-sm btn-warning">edit</a>
+                                    </td>
+                                </td>
+                                <td>
+                                    <a href="delete.php?id=<?= $row['id']?>" class="btn btn-sm btn-danger">delete</a>
+                                </td>
+                                <?php }?>
+
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            </div>
+            
+            
+        </main>
         <footer>
             <!-- place footer here -->
         </footer>
